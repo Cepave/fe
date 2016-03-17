@@ -3,9 +3,10 @@ package g
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/toolkits/file"
 	"log"
 	"sync"
+
+	"github.com/toolkits/file"
 )
 
 type HttpConfig struct {
@@ -34,6 +35,17 @@ type UicConfig struct {
 	Max  int    `json:"max"`
 }
 
+type GraphDBConfig struct {
+	Addr string `json:"addr"`
+	Idle int    `json:"idle"`
+	Max  int    `json:"max"`
+}
+type FalconPortalConfig struct {
+	Addr string `json:"addr"`
+	Idle int    `json:"idle"`
+	Max  int    `json:"max"`
+}
+
 type ShortcutConfig struct {
 	FalconPortal     string `json:"falconPortal"`
 	FalconDashboard  string `json:"falconDashboard"`
@@ -42,8 +54,13 @@ type ShortcutConfig struct {
 }
 
 type LdapConfig struct {
-	Enabled bool   `json:"enabled"`
-	Addr    string `json:"addr"`
+	Enabled    bool     `json:"enabled"`
+	Addr       string   `json:"addr"`
+	BindDN     string   `json:"bindDN"`
+	BaseDN     string   `json:"baseDN`
+	BindPasswd string   `json:"bindPasswd"`
+	UserField  string   `json:"userField"`
+	Attributes []string `json:attributes`
 }
 
 type ApiConfig struct {
@@ -55,17 +72,34 @@ type ApiConfig struct {
 	Logout   string `json:"logout"`
 }
 
+type GraphConfig struct {
+	ConnTimeout int32             `json:"connTimeout"`
+	CallTimeout int32             `json:"callTimeout"`
+	MaxConns    int32             `json:"maxConns"`
+	MaxIdle     int32             `json:"maxIdle"`
+	Replicas    int32             `json:"replicas"`
+	Cluster     map[string]string `json:"cluster"`
+}
+
+type GrpcConfig struct {
+	Port int `json:"port"`
+}
+
 type GlobalConfig struct {
-	Log         string          `json:"log"`
-	Company     string          `json:"company"`
-	Cache       *CacheConfig    `json:"cache"`
-	Http        *HttpConfig     `json:"http"`
-	Salt        string          `json:"salt"`
-	CanRegister bool            `json:"canRegister"`
-	Ldap        *LdapConfig     `json:"ldap"`
-	Uic         *UicConfig      `json:"uic"`
-	Shortcut    *ShortcutConfig `json:"shortcut"`
-	Api         *ApiConfig      `json:"api"`
+	Log          string              `json:"log"`
+	Company      string              `json:"company"`
+	Cache        *CacheConfig        `json:"cache"`
+	Http         *HttpConfig         `json:"http"`
+	Salt         string              `json:"salt"`
+	CanRegister  bool                `json:"canRegister"`
+	Ldap         *LdapConfig         `json:"ldap"`
+	Uic          *UicConfig          `json:"uic"`
+	GraphDB      *GraphDBConfig      `json:"graphdb"`
+	FalconPortal *FalconPortalConfig `json:"falcon_portal"`
+	Shortcut     *ShortcutConfig     `json:"shortcut"`
+	Api          *ApiConfig          `json:"api"`
+	Graph        *GraphConfig        `json:"graph"`
+	Grpc         *GrpcConfig         `json:"grpc"`
 }
 
 var (
