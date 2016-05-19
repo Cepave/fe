@@ -29,14 +29,25 @@ type CacheConfig struct {
 	Timeout *TimeoutConfig `json:"timeout"`
 }
 
+type DatabaseConfig struct {
+	Host     string `json:"host"`
+	Port     int    `json:"port"`
+	Protocol string `json:"protocol"`
+	Account  string `json:"account"`
+	Password string `json:"password"`
+	Options  string `json:"options"`
+}
+
 type UicConfig struct {
-	Addr string `json:"addr"`
-	Idle int    `json:"idle"`
-	Max  int    `json:"max"`
+	Addr  string `json:"addr"`
+	Table string `json:"table"`
+	Idle  int    `json:"idle"`
+	Max   int    `json:"max"`
 }
 
 type GraphDBConfig struct {
 	Addr           string `json:"addr"`
+	Table          string `json:"table"`
 	Idle           int    `json:"idle"`
 	Max            int    `json:"max"`
 	Limit          int    `json:"limit"`
@@ -44,6 +55,7 @@ type GraphDBConfig struct {
 }
 type FalconPortalConfig struct {
 	Addr  string `json:"addr"`
+	Table string `json:"table"`
 	Idle  int    `json:"idle"`
 	Max   int    `json:"max"`
 	Limit int    `json:"limit"`
@@ -96,6 +108,7 @@ type GlobalConfig struct {
 	Salt         string              `json:"salt"`
 	CanRegister  bool                `json:"canRegister"`
 	Ldap         *LdapConfig         `json:"ldap"`
+	Db           *DatabaseConfig     `json:"db"`
 	Uic          *UicConfig          `json:"uic"`
 	GraphDB      *GraphDBConfig      `json:"graphdb"`
 	FalconPortal *FalconPortalConfig `json:"falcon_portal"`
@@ -139,6 +152,16 @@ func ParseConfig(cfg string) error {
 		return fmt.Errorf("parse config file %s fail %s", cfg, err)
 	}
 
+	db := c.Db
+	uicdb := c.Uic
+	graphdb := c.GraphDB
+	fpdb := c.FalconPortal
+	uicdb.Addr = fmt.Sprintf("%s:%s@%s(%s:%d)/%s?%s", db.Account, db.Password, db.Protocol, db.Host, db.Port, uicdb.Table, db.Options)
+	graphdb.Addr = fmt.Sprintf("%s:%s@%s(%s:%d)/%s?%s", db.Account, db.Password, db.Protocol, db.Host, db.Port, graphdb.Table, db.Options)
+	fpdb.Addr = fmt.Sprintf("%s:%s@%s(%s:%d)/%s?%s", db.Account, db.Password, db.Protocol, db.Host, db.Port, fpdb.Table, db.Options)
+	c.Uic = uicdb
+	c.FalconPortal = fpdb
+	c.GraphDB = graphdb
 	configLock.Lock()
 	defer configLock.Unlock()
 

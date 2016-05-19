@@ -28,20 +28,28 @@
         "userField": "uid",
         "attributes": ["sn","mail","telephoneNumber"]
     },
+    "db": {
+        "host":  "127.0.0.1",
+        "port": 3306,
+        "protocol": "tcp",
+        "account": "root",
+        "password": "password",
+        "options": "charset=utf8&loc=Asia%2FTaipei"
+    },
     "uic": {
-        "addr": "root:@tcp(127.0.0.1:3306)/uic?charset=utf8&loc=Asia%2FChongqing",
+        "table": "uic",
         "idle": 10,
         "max": 100
     },
     "graphdb": {
-        "addr": "root@tcp(127.0.0.1:3306)/graph?charset=utf8&loc=Asia%2FTaipei",
+        "table": "graph",
         "idle": 10,
         "max": 100,
         "limit": 500,
         "limitHostGroup": 5
     },
     "falcon_portal": {
-        "addr": "root@tcp(127.0.0.1:3306)/falcon_portal?charset=utf8&loc=Asia%2FChongqing",
+        "table": "falcon_portal",
         "idle": 10,
         "max": 100,
         "limit": 500
