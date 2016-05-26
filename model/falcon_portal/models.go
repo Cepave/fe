@@ -31,6 +31,7 @@ type Events struct {
 	Id          int         `json:"id" orm:"pk"`
 	Step        int         `json:"step"`
 	Cond        string      `json:"cond"`
+	Status      int         `json:"status"`
 	Timestamp   time.Time   `json:"timestamp"`
 	EventCaseId *EventCases `json:"event_caseId" orm:"rel(fk)"`
 }
@@ -61,6 +62,6 @@ type Action struct {
 	Callback           int    `json:"callback"`
 	BeforeCallbackSms  int    `json:"before_callback_sms"`
 	BeforeCallbackMail int    `json:"before_callback_mail"`
-	AfterCallbackSms   int    `json"after_callback_sms"`
+	AfterCallbackSms   int    `json:"after_callback_sms"`
 	AfterCallbackMail  int    `json:"after_callback_mail"`
 }
