@@ -85,7 +85,14 @@ type GraphConfig struct {
 }
 
 type GrpcConfig struct {
-	Port int `json:"port"`
+	Enabled bool `json:"enabled"`
+	Port    int  `json:"port"`
+}
+
+type MqConfig struct {
+	Enabled  bool   `json:"enabled"`
+	Queue    string `json:"queue"`
+	Consumer string `json:"consumer"`
 }
 
 type GlobalConfig struct {
@@ -103,6 +110,7 @@ type GlobalConfig struct {
 	Api          *ApiConfig          `json:"api"`
 	Graph        *GraphConfig        `json:"graph"`
 	Grpc         *GrpcConfig         `json:"grpc"`
+	Mq           *MqConfig           `json:"mq"`
 }
 
 var (

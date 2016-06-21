@@ -9,6 +9,7 @@ import (
 	"github.com/Cepave/fe/grpc"
 	"github.com/Cepave/fe/http"
 	"github.com/Cepave/fe/model"
+	"github.com/Cepave/fe/mq"
 	"github.com/toolkits/logger"
 	"log"
 	"os"
@@ -18,7 +19,6 @@ func main() {
 	cfg := flag.String("c", "cfg.json", "configuration file")
 	version := flag.Bool("v", false, "show version")
 	flag.Parse()
-
 	if *version {
 		fmt.Println(g.VERSION)
 		os.Exit(0)
@@ -29,13 +29,22 @@ func main() {
 		log.Fatalln(err)
 	}
 
+	conf := g.Config()
 	logger.SetLevelWithDefault(g.Config().Log, "info")
 
 	model.InitDatabase()
 	cache.InitCache()
 
-	graph.Start()
-	go grpc.Start()
+	if conf.Grpc.Enabled {
+		graph.Start()
+		go grpc.Start()
+	}
+	if conf.Mq.Enabled {
+		go mq.Start()
+	}
+	if conf.Http.Enabled {
+		go http.Start()
+	}
 
-	http.Start()
+	select {}
 }
